@@ -1,0 +1,14 @@
+# Những file không up lên
+venv/
+.env
+
+__pycache__/
+*.py[cod]
+
+.ipynb_checkpoints/
+
+
+.vscode/
+
+.DS_Store
+Thumbs.db
