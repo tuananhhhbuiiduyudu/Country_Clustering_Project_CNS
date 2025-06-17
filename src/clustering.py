@@ -9,7 +9,7 @@ from sklearn.cluster import AgglomerativeClustering
 import numpy as np 
 import pandas as pd 
 
-def get_compose(df: pd.DataFrame, std_cols: list = None, mms_cols: list = None,
+def get_compose(df: pd.DataFrame = None, std_cols: list = None, mms_cols: list = None,
                 n_components: int = 3, n_clusters: int = 3,
                 use_pca: bool = False, use_kmean: bool = False, use_agglomerative: bool = False) -> Pipeline:
     
@@ -28,6 +28,8 @@ def get_compose(df: pd.DataFrame, std_cols: list = None, mms_cols: list = None,
         steps.append(('preprocess', preprocessor))
         steps.append(('pca', PCA(n_components=n_components)))
     else:
+        if df is None:
+            raise ValueError("Vì bạn đã đặt use_pca=False, hãy truyền vào DataFrame đã được xử lý (đã scale hoặc PCA).")
         # Lúc này df đã là df_fe nên không cần feature_engineering()
         preprocessor = ColumnTransformer(transformers=[
             ('mms', MinMaxScaler(), df.columns.to_list())

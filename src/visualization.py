@@ -7,10 +7,9 @@ from src import data_loader
 from src import config
 from sklearn.cluster import KMeans 
 from sklearn.metrics import silhouette_score
-def select_components_pca(df : pd.DataFrame) : 
-    result = data_preprocessing.use_preprocesing(df, use_pca=True)
-    plt.step(list(range(1,10)) , np.cumsum(result['explained_variance_radio']))
-    plt.plot(np.cumsum(result['explained_variance_radio']))
+def select_components_pca(x : np.array) : 
+    plt.step(list(range(1,10)) , np.cumsum(x))
+    plt.plot(np.cumsum(x))
     plt.xlabel('Số lượng chiều')
     plt.ylabel("Tỷ lệ phương sai theo số lượng chiều")
     plt.tight_layout()

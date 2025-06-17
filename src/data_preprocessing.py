@@ -20,7 +20,7 @@ def feature_engineering(df : pd.DataFrame) -> pd.DataFrame :
 
 def apply_pca(df : pd.DataFrame , n_components = None): 
     result_pca = {}
-    pca = PCA(n_components= n_components)
+    pca = PCA()
     if 'country' in df.columns:
         df = df.drop('country', axis=1)
     pca_df2 = pd.DataFrame(pca.fit_transform(df))
@@ -29,7 +29,7 @@ def apply_pca(df : pd.DataFrame , n_components = None):
     
     return result_pca
 
-def use_preprocesing(df : pd.DataFrame ,use_pca: bool = False):
+def use_preprocesing(df : pd.DataFrame ,use_pca: bool = False , n_components = None):
     sds = StandardScaler()
     mms = MinMaxScaler()
     if use_pca : 
