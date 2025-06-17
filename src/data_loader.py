@@ -1,5 +1,6 @@
 import pandas as pd 
-import config 
+from src import data_loader
+from src import config
 
 def load_data(filepath = config.SET_PATH_DATA) -> pd.DataFrame : 
     try : 
