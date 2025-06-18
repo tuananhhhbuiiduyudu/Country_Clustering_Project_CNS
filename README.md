@@ -102,7 +102,7 @@ Truy cập trình duyệt tại: `http://localhost:8501`
 
 - **Tiền xử lý**: StandardScaler, xử lý null, encode
 - **Giảm chiều**: PCA
-- **Clustering**: KMeans, DBSCAN, Agglomerative
+- **Clustering**: KMeans, Agglomerative
 - **Trực quan**: seaborn, matplotlib, plotly
 - **App**: Streamlit
 
