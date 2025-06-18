@@ -2,12 +2,13 @@ from src import config
 from src import data_loader
 from sklearn.decomposition import PCA 
 from sklearn.compose import ColumnTransformer 
-from sklearn.preprocessing import MinMaxScaler , StandardScaler 
+from sklearn.preprocessing import MinMaxScaler , StandardScaler , FunctionTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.cluster import KMeans 
 from sklearn.cluster import AgglomerativeClustering
 import numpy as np 
 import pandas as pd 
+from src.data_preprocessing import feature_engineering
 
 def get_compose(df: pd.DataFrame = None, std_cols: list = None, mms_cols: list = None,
                 n_components: int = 3, n_clusters: int = 3,
@@ -29,13 +30,18 @@ def get_compose(df: pd.DataFrame = None, std_cols: list = None, mms_cols: list =
         steps.append(('pca', PCA(n_components=n_components)))
     else:
         if df is None:
-            raise ValueError("Vì bạn đã đặt use_pca=False, hãy truyền vào DataFrame đã được xử lý (đã scale hoặc PCA).")
-        # Lúc này df đã là df_fe nên không cần feature_engineering()
-        preprocessor = ColumnTransformer(transformers=[
-            ('mms', MinMaxScaler(), df.columns.to_list())
-        ])
-        steps.append(('preprocess', preprocessor))
+            raise ValueError("Vì bạn đã đặt use_pca=False, hãy truyền vào DataFrame gốc")
 
+        required_cols = ['country', 'child_mort', 'exports', 'health', 'imports', 'income', 'inflation', 'life_expec', 'total_fer', 'gdpp']
+        if not set(required_cols).issubset(df.columns):
+            raise ValueError(f"Thiếu cột cần thiết cho feature_engineering: {set(required_cols) - set(df.columns)}")
+        # Lúc này df đã là df_fe nên không cần feature_engineering()
+        feature_step = ('feature_engineering', FunctionTransformer(feature_engineering))
+        preprocessor = ColumnTransformer(transformers=[
+            ('mms', MinMaxScaler(), ['Trade', 'Finance', 'Health'])
+        ])
+        steps.append(feature_step)
+        steps.append(('preprocess', preprocessor))
     if use_kmean:
         steps.append(('kmean', KMeans(n_clusters=n_clusters, init="k-means++", random_state=config.RANDOM_STATE)))
     elif use_agglomerative:
